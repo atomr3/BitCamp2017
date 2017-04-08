@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class CardsViewController: UIViewController {
   
@@ -29,22 +53,22 @@ class CardsViewController: UIViewController {
   
   var users: [User]?
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     navigationItem.titleView = UIImageView(image: UIImage(named: "nav-header"))
-    let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile-button"), style: .Plain, target: self, action: "goToProfile:")
-    navigationItem.setLeftBarButtonItem(leftBarButtonItem, animated: true)
-    let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "chat-header"), style: .Plain, target: self, action: "goToMatches:")
-    navigationItem.setRightBarButtonItem(rightBarButtonItem, animated: true)
+    let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile-button"), style: .plain, target: self, action: #selector(CardsViewController.goToProfile(_:)))
+    navigationItem.setLeftBarButton(leftBarButtonItem, animated: true)
+    let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "chat-header"), style: .plain, target: self, action: #selector(CardsViewController.goToMatches(_:)))
+    navigationItem.setRightBarButton(rightBarButtonItem, animated: true)
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    cardStackView.backgroundColor = UIColor.clearColor()
-    nahButton.setImage(UIImage(named: "nah-button-pressed"), forState: .Highlighted)
-    yeahButton.setImage(UIImage(named: "yeah-button-pressed"), forState: .Highlighted)
+    cardStackView.backgroundColor = UIColor.clear
+    nahButton.setImage(UIImage(named: "nah-button-pressed"), for: .highlighted)
+    yeahButton.setImage(UIImage(named: "yeah-button-pressed"), for: .highlighted)
     
     fetchUnviewedUsers({
       returnUsers in
@@ -63,31 +87,31 @@ class CardsViewController: UIViewController {
     })
   }
   
-  @IBAction func nahButtonPressed(sender: UIButton) {
+  @IBAction func nahButtonPressed(_ sender: UIButton) {
     if let card = frontCard {
-      card.swipeView.swipeDirection(.Left)
+      card.swipeView.swipeDirection(.left)
     }
   }
   
-  @IBAction func yeahButtonPressed(sender: UIButton) {
+  @IBAction func yeahButtonPressed(_ sender: UIButton) {
     if let card = frontCard {
-      card.swipeView.swipeDirection(.Right)
+      card.swipeView.swipeDirection(.right)
     }
   }
   
-  func goToProfile(button: UIBarButtonItem) {
+  func goToProfile(_ button: UIBarButtonItem) {
       pageController.goToPreviousVC()
   }
   
-  func goToMatches(button: UIBarButtonItem) {
+  func goToMatches(_ button: UIBarButtonItem) {
     pageController.goToNextVC()
   }
 
-  private func createCardFrame(topMargin: CGFloat) -> CGRect {
+  fileprivate func createCardFrame(_ topMargin: CGFloat) -> CGRect {
     return CGRect(x: 0, y: topMargin, width: cardStackView.frame.width, height: cardStackView.frame.height)
   }
   
-  private func createCard(user: User) -> Card {
+  fileprivate func createCard(_ user: User) -> Card {
     let cardView = CardView()
     
     cardView.name = user.name
@@ -102,17 +126,17 @@ class CardsViewController: UIViewController {
     return Card(cardView: cardView, swipeView: swipeView, user: user)
   }
   
-  private func popCard() -> Card? {
+  fileprivate func popCard() -> Card? {
     if users != nil && users?.count > 0 {
       return createCard(users!.removeLast())
     }
     return nil
   }
   
-  private func switchCards() {
+  fileprivate func switchCards() {
     if let card = backCard {
       frontCard = card
-      UIView.animateWithDuration(0.2, animations: {
+      UIView.animate(withDuration: 0.2, animations: {
         self.frontCard!.swipeView.frame = self.createCardFrame(self.frontCardTopMargin)
       })
     }
@@ -131,7 +155,7 @@ class CardsViewController: UIViewController {
 extension CardsViewController: SwipeViewDelegate {
   
   func swipedLeft() {
-    println("left")
+    print("left")
     if let frontCard = frontCard {
       frontCard.swipeView.removeFromSuperview()
       saveSkip(frontCard.user)
@@ -140,7 +164,7 @@ extension CardsViewController: SwipeViewDelegate {
   }
   
   func swipedRight() {
-    println("right")
+    print("right")
     if let frontCard = frontCard {
       frontCard.swipeView.removeFromSuperview()
       saveLike(frontCard.user)

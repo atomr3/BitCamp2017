@@ -17,9 +17,9 @@ protocol SwipeViewDelegate: class {
 class SwipeView: UIView {
   
   enum Direction {
-    case None
-    case Right
-    case Left
+    case none
+    case right
+    case left
   }
   
   weak var delegate: SwipeViewDelegate?
@@ -36,7 +36,7 @@ class SwipeView: UIView {
     }
   }
   
-  private var originalPoint: CGPoint?
+  fileprivate var originalPoint: CGPoint?
   
   required init(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
@@ -48,78 +48,78 @@ class SwipeView: UIView {
     initialize()
   }
   
-  private func initialize() {
-    backgroundColor = UIColor.clearColor()
+  fileprivate func initialize() {
+    backgroundColor = UIColor.clear
     
-    addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "dragged:"))
+    addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(SwipeView.dragged(_:))))
     
     overlay.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
     addSubview(overlay)
   }
   
-  func dragged(gestureRecognizer: UIPanGestureRecognizer) {
-    let distance = gestureRecognizer.translationInView(self)
+  func dragged(_ gestureRecognizer: UIPanGestureRecognizer) {
+    let distance = gestureRecognizer.translation(in: self)
     
     switch gestureRecognizer.state {
     
-    case .Began:
+    case .began:
       originalPoint = center
     
-    case .Changed:
+    case .changed:
       let rotationPercentage = min(distance.x/(self.superview!.frame.width/2), 1)
       let rotationAngle = (CGFloat(2*M_PI/16)*rotationPercentage)
       
-      transform = CGAffineTransformMakeRotation(rotationAngle)
-      center = CGPointMake(originalPoint!.x + distance.x, originalPoint!.y + distance.y)
+      transform = CGAffineTransform(rotationAngle: rotationAngle)
+      center = CGPoint(x: originalPoint!.x + distance.x, y: originalPoint!.y + distance.y)
       updateOverlay(distance.x)
     
-    case .Ended:
+    case .ended:
       if abs(distance.x) < frame.width/4 {
         resetViewPositionAndTransformations()
       } else {
-        swipeDirection(distance.x > 0 ? .Right : .Left) // ternary operator - if true, first condition, otherwise second
+        swipeDirection(distance.x > 0 ? .right : .left) // ternary operator - if true, first condition, otherwise second
       }
     
     default:
-      println("Default triggered for GestureRecognizer")
+      print("Default triggered for GestureRecognizer")
       break
     }
   }
   
-  func swipeDirection(s: Direction) {
-    if s == .None {
+  func swipeDirection(_ s: Direction) {
+    if s == .none {
       return
     }
     var parentWidth = superview!.frame.size.width
-    if s == .Left {
+    if s == .left {
       parentWidth *= -1
     }
     
-    UIView.animateWithDuration(0.2, animations: {
+    UIView.animate(withDuration: 0.2, animations: {
       self.center.x = self.frame.origin.x + parentWidth
       }, completion: {
         success in
         if let d = self.delegate {
-          s == .Right ? d.swipedRight() : d.swipedLeft() // protocol functions
+          s == .right ? d.swipedRight() : d.swipedLeft() // protocol functions
         }
     })
   }
   
-  private func updateOverlay(distance: CGFloat) {
+  fileprivate func updateOverlay(_ distance: CGFloat) {
     var newDirection: Direction
-    newDirection = distance < 0 ? .Left : .Right
+    newDirection = distance < 0 ? .left : .right
     
     if newDirection != direction {
       direction = newDirection
-      overlay.image = direction == .Right ? UIImage(named: "yeah-stamp") : UIImage(named: "nah-stamp")
+      overlay.image = direction == .right ? UIImage(named: "yeah-stamp") : UIImage(named: "nah-stamp")
     }
     overlay.alpha = abs(distance) / (superview!.frame.width / 2)
   }
   
-  private func resetViewPositionAndTransformations() {
-    UIView.animateWithDuration(0.2, animations: { () -> Void in
+  fileprivate func resetViewPositionAndTransformations() {
+    UIView.animate(withDuration: 0.2, animations: { () -> Void in
       self.center = self.originalPoint!
-      self.transform = CGAffineTransformMakeRotation(0)
+      self.transform = CGAffineTransform(rotationAngle: 0)
       
       self.overlay.alpha = 0
     })

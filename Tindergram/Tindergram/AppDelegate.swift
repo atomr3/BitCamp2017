@@ -14,17 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   
   
-  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     Parse.setApplicationId(parseAppID, clientKey: parseClientKey)
     PFFacebookUtils.initializeFacebook()
     
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
     var initialViewController: UIViewController
     
-    if PFUser.currentUser() != nil {
+    if PFUser.current() != nil {
       initialViewController = pageController
     } else {
-      initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as! UIViewController
+      initialViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") 
     }
     
     window?.rootViewController = initialViewController
@@ -33,15 +33,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
   
-  func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-    return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication, withSession: PFFacebookUtils.session())
+  func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+    return FBAppCall.handleOpen(url, sourceApplication: sourceApplication, with: PFFacebookUtils.session())
   }
   
-  func applicationDidBecomeActive(application: UIApplication) {
-    FBAppCall.handleDidBecomeActiveWithSession(PFFacebookUtils.session())
+  func applicationDidBecomeActive(_ application: UIApplication) {
+    FBAppCall.handleDidBecomeActive(with: PFFacebookUtils.session())
   }
   
-  func applicationWillTerminate(application: UIApplication) {
+  func applicationWillTerminate(_ application: UIApplication) {
     PFFacebookUtils.session()?.close()
   }
   

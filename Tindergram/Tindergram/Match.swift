@@ -13,23 +13,23 @@ struct Match {
   let user: User
 }
 
-func fetchMatches (callBack: ([Match]) -> ()) {
+func fetchMatches (_ callBack: @escaping ([Match]) -> ()) {
   PFQuery(className: "Action")
-    .whereKey("byUser", equalTo: PFUser.currentUser()!.objectId!)
+    .whereKey("byUser", equalTo: PFUser.current()!.objectId!)
     .whereKey("type", equalTo: "matched")
-    .findObjectsInBackgroundWithBlock({
+    .findObjectsInBackground(block: {
       objects, error in
       
       if let matches = objects as? [PFObject] {
         let matchedUsers = matches.map({
           (object)->(matchID: String, userID: String) in
-          (object.objectId!, object.objectForKey("toUser") as! String)
+          (object.objectId!, object.object(forKey: "toUser") as! String)
         })
         let userIDs = matchedUsers.map({$0.userID})
         
         PFUser.query()!
           .whereKey("objectId", containedIn: userIDs)
-          .findObjectsInBackgroundWithBlock({
+          .findObjectsInBackground(block: {
             objects, error in
             
             if let users = objects as? [PFUser] {

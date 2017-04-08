@@ -12,12 +12,12 @@ class MatchesTableViewController: UITableViewController {
   
   var matches: [Match] = []
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     navigationItem.titleView = UIImageView(image: UIImage(named: "chat-header"))
-    let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-back-button"), style: UIBarButtonItemStyle.Plain, target: self, action: "goToPreviousVC:")
-    navigationItem.setLeftBarButtonItem(leftBarButtonItem, animated: true)
+    let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-back-button"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MatchesTableViewController.goToPreviousVC(_:)))
+    navigationItem.setLeftBarButton(leftBarButtonItem, animated: true)
     
     fetchMatches({
       matches in
@@ -26,7 +26,7 @@ class MatchesTableViewController: UITableViewController {
     })
   }
   
-  func goToPreviousVC(button: UIBarButtonItem) {
+  func goToPreviousVC(_ button: UIBarButtonItem) {
     pageController.goToPreviousVC()
   }
   
@@ -37,16 +37,16 @@ class MatchesTableViewController: UITableViewController {
   
   // MARK: - Table view data source
   
-  override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+  override func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
   
-  override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return matches.count
   }
   
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCellWithIdentifier("UserCell", forIndexPath: indexPath) as! UserCell
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserCell
     
     let user = matches[indexPath.row].user
     cell.nameLabel.text = user.name
@@ -57,7 +57,7 @@ class MatchesTableViewController: UITableViewController {
     return cell
   }
   
-  override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     let vc = ChatViewController()
     let match = matches[indexPath.row]
@@ -66,7 +66,7 @@ class MatchesTableViewController: UITableViewController {
     
     navigationController?.pushViewController(vc, animated: true)
     
-    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    tableView.deselectRow(at: indexPath, animated: true)
   }
   
 }

@@ -14,12 +14,12 @@ class ProfileViewController: UIViewController {
   @IBOutlet weak var nameLabel: UILabel!
   
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     navigationItem.titleView = UIImageView(image: UIImage(named: "profile-header"))
-    let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-back-button"), style: .Plain, target: self, action: "goToCards:")
-    navigationItem.setRightBarButtonItem(rightBarButtonItem, animated: true)
+    let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav-back-button"), style: .plain, target: self, action: #selector(ProfileViewController.goToCards(_:)))
+    navigationItem.setRightBarButton(rightBarButtonItem, animated: true)
     
   }
   
@@ -30,12 +30,12 @@ class ProfileViewController: UIViewController {
     currentUser()?.getPhoto({
       image in
       self.imageView.layer.masksToBounds = true
-      self.imageView.contentMode = .ScaleAspectFill
+      self.imageView.contentMode = .scaleAspectFill
       self.imageView.image = image
     })
   }
   
-  func goToCards(button: UIBarButtonItem) {
+  func goToCards(_ button: UIBarButtonItem) {
     pageController.goToNextVC()
   }
   

@@ -11,8 +11,8 @@ import UIKit
 
 class CardView: UIView {
   
-  private let imageView: UIImageView = UIImageView()
-  private let nameLabel: UILabel = UILabel()
+  fileprivate let imageView: UIImageView = UIImageView()
+  fileprivate let nameLabel: UILabel = UILabel()
   
   var name: String? {
     didSet {
@@ -40,35 +40,35 @@ class CardView: UIView {
     initialize()
   }
   
-  private func initialize() {
+  fileprivate func initialize() {
     imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-    imageView.backgroundColor = UIColor.clearColor()
+    imageView.backgroundColor = UIColor.clear
     addSubview(imageView)
     
     nameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
     addSubview(nameLabel)
     
-    backgroundColor = UIColor.whiteColor()
+    backgroundColor = UIColor.white
     layer.borderWidth = 0.5
-    layer.borderColor = UIColor.lightGrayColor().CGColor // converts UIColor to correct type
+    layer.borderColor = UIColor.lightGray.cgColor // converts UIColor to correct type
     layer.cornerRadius = 5
     layer.masksToBounds = true // things cannot exceed the cardview's bounds
     
     setConstraints()
   }
   
-  private func setConstraints() {
+  fileprivate func setConstraints() {
     // imageView Constraints
-    addConstraint(NSLayoutConstraint(item: imageView, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0))
-    addConstraint(NSLayoutConstraint(item: imageView, attribute: .Leading, relatedBy: .Equal, toItem: self, attribute: .Leading, multiplier: 1.0, constant: 0))
-    addConstraint(NSLayoutConstraint(item: imageView, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 1.0, constant: 0))
-    addConstraint(NSLayoutConstraint(item: imageView, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 1.0, constant: 0))
+    addConstraint(NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0))
+    addConstraint(NSLayoutConstraint(item: imageView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0))
+    addConstraint(NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 1.0, constant: 0))
+    addConstraint(NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1.0, constant: 0))
     
     // nameLabel Constraints
-    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .Top, relatedBy: .Equal, toItem: imageView, attribute: .Top, multiplier: 1.0, constant: 0))
-    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .Leading, relatedBy: .Equal, toItem: self, attribute: .Leading, multiplier: 1.0, constant: 10))
-    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self, attribute: .Trailing, multiplier: 1.0, constant: -10))
-    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .Bottom, relatedBy: .Equal, toItem: imageView, attribute: .Bottom, multiplier: 1.0, constant: 0))
+    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .top, relatedBy: .equal, toItem: imageView, attribute: .top, multiplier: 1.0, constant: 0))
+    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 10))
+    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: -10))
+    addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .bottom, relatedBy: .equal, toItem: imageView, attribute: .bottom, multiplier: 1.0, constant: 0))
   }
   
 }

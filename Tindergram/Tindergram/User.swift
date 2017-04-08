@@ -11,12 +11,12 @@ import Foundation
 struct User {
   let id: String
   let name: String
-  private let pfUser: PFUser
+  fileprivate let pfUser: PFUser
   
-  func getPhoto(callback: (UIImage) -> ()) {
-    let imageFile = pfUser.objectForKey("picture") as! PFFile
+  func getPhoto(_ callback: @escaping (UIImage) -> ()) {
+    let imageFile = pfUser.object(forKey: "picture") as! PFFile
     
-    imageFile.getDataInBackgroundWithBlock({
+    imageFile.getDataInBackground(block: {
       data, error in
       if let data = data {
         callback(UIImage(data: data)!)
@@ -25,31 +25,31 @@ struct User {
   }
 }
 
-func pfUserToUser(user: PFUser) -> User {
-  return User(id: user.objectId!, name: user.objectForKey("firstName") as! String, pfUser: user)
+func pfUserToUser(_ user: PFUser) -> User {
+  return User(id: user.objectId!, name: user.object(forKey: "firstName") as! String, pfUser: user)
 }
 
 func currentUser() -> User? {
-  if let user = PFUser.currentUser() {
+  if let user = PFUser.current() {
     return pfUserToUser(user)
   }
   return nil
 }
 
-func fetchUnviewedUsers(callback: ([User] -> ())) {
+func fetchUnviewedUsers(_ callback: @escaping (([User]) -> ())) {
   
   PFQuery(className: "Action")
-    .whereKey("byUser", equalTo: PFUser.currentUser()!.objectId!).findObjectsInBackgroundWithBlock({
+    .whereKey("byUser", equalTo: PFUser.current()!.objectId!).findObjectsInBackground(block: {
       objects, error in
       
-      println(objects!)
-      let viewedUsers = map(objects!, {$0.objectForKey("toUser")!})
-      println(viewedUsers)
+      print(objects!)
+      let viewedUsers = map(objects!, {$0.object(forKey: "toUser")!})
+      print(viewedUsers)
       
       PFUser.query()!
-        .whereKey("objectId", notEqualTo: PFUser.currentUser()!.objectId!)
+        .whereKey("objectId", notEqualTo: PFUser.current()!.objectId!)
         .whereKey("objectId", notContainedIn: viewedUsers)
-        .findObjectsInBackgroundWithBlock({
+        .findObjectsInBackground(block: {
           objects, error in
           
           if let pfUsers = objects as? [PFUser] {
@@ -60,20 +60,20 @@ func fetchUnviewedUsers(callback: ([User] -> ())) {
     })
 }
 
-func saveSkip(user: User) {
+func saveSkip(_ user: User) {
   let skip = PFObject(className: "Action")
-  skip.setObject(PFUser.currentUser()!.objectId!, forKey: "byUser")
+  skip.setObject(PFUser.current()!.objectId!, forKey: "byUser")
   skip.setObject(user.id, forKey: "toUser")
   skip.setObject("skipped", forKey: "type")
-  skip.saveInBackgroundWithBlock(nil)
+  skip.saveInBackground(block: nil)
 }
 
-func saveLike(user: User) {
+func saveLike(_ user: User) {
   PFQuery(className: "Action")
     .whereKey("byUser", equalTo: user.id)
-    .whereKey("toUser", equalTo: PFUser.currentUser()!.objectId!)
+    .whereKey("toUser", equalTo: PFUser.current()!.objectId!)
     .whereKey("type", equalTo: "liked")
-    .getFirstObjectInBackgroundWithBlock({
+    .getFirstObjectInBackground(block: {
       object, error in
       
       var matched = false
@@ -81,14 +81,14 @@ func saveLike(user: User) {
       if object != nil {
         matched = true
         object!.setObject("matched", forKey: "type")
-        object!.saveInBackgroundWithBlock(nil)
+        object!.saveInBackground(block: nil)
       }
       
       let match = PFObject(className: "Action")
-      match.setObject(PFUser.currentUser()!.objectId!, forKey: "byUser")
+      match.setObject(PFUser.current()!.objectId!, forKey: "byUser")
       match.setObject(user.id, forKey: "toUser")
       match.setObject(matched ? "matched" : "liked", forKey: "type")
-      match.saveInBackgroundWithBlock(nil)
+      match.saveInBackground(block: nil)
     })
 }
 

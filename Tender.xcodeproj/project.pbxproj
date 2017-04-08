@@ -14,7 +14,6 @@
 		1702A7291E98A34000619CDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1702A7281E98A34000619CDD /* Assets.xcassets */; };
 		1702A72C1E98A34000619CDD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1702A72A1E98A34000619CDD /* LaunchScreen.storyboard */; };
 		1702A7371E98A34000619CDD /* TenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1702A7361E98A34000619CDD /* TenderTests.swift */; };
-		1702A7421E98A34000619CDD /* TenderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1702A7411E98A34000619CDD /* TenderUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +46,6 @@
 		1702A7361E98A34000619CDD /* TenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenderTests.swift; sourceTree = "<group>"; };
 		1702A7381E98A34000619CDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1702A73D1E98A34000619CDD /* TenderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TenderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1702A7411E98A34000619CDD /* TenderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenderUITests.swift; sourceTree = "<group>"; };
-		1702A7431E98A34000619CDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +78,6 @@
 			children = (
 				1702A71D1E98A34000619CDD /* Tender */,
 				1702A7351E98A34000619CDD /* TenderTests */,
-				1702A7401E98A34000619CDD /* TenderUITests */,
 				1702A71C1E98A34000619CDD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,15 +113,6 @@
 				1702A7381E98A34000619CDD /* Info.plist */,
 			);
 			path = TenderTests;
-			sourceTree = "<group>";
-		};
-		1702A7401E98A34000619CDD /* TenderUITests */ = {
-			isa = PBXGroup;
-			children = (
-				1702A7411E98A34000619CDD /* TenderUITests.swift */,
-				1702A7431E98A34000619CDD /* Info.plist */,
-			);
-			path = TenderUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,7 +267,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1702A7421E98A34000619CDD /* TenderUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +495,7 @@
 				1702A7481E98A34000619CDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1702A7491E98A34000619CDD /* Build configuration list for PBXNativeTarget "TenderTests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +504,7 @@
 				1702A74B1E98A34000619CDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1702A74C1E98A34000619CDD /* Build configuration list for PBXNativeTarget "TenderUITests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +513,7 @@
 				1702A74E1E98A34000619CDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

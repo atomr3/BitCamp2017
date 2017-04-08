@@ -14,12 +14,12 @@ class ChatViewController: JSQMessagesViewController {
   var matchID: String?
   var messageListener: MessageListener?
   
-  let outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
-  let incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+  let outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
+  let incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     if let id = matchID {
-      messageListener = MessageListener(matchID: id, startDate: NSDate(), callback: {
+      messageListener = MessageListener(matchID: id, startDate: Date(), callback: {
         message in
         
         self.messages.append(JSQMessage(senderId: message.senderID, senderDisplayName: message.senderID, date: message.date, text: message.message))
@@ -33,8 +33,8 @@ class ChatViewController: JSQMessagesViewController {
     senderDisplayName = currentUser()!.id
     senderId = currentUser()!.id
     
-    collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
-    collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
+    collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
+    collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
     inputToolbar.contentView.leftBarButtonItem = nil
     
     if let id = matchID {
@@ -49,33 +49,33 @@ class ChatViewController: JSQMessagesViewController {
     }
   }
   
-  override func viewWillDisappear(animated: Bool) {
+  override func viewWillDisappear(_ animated: Bool) {
     messageListener?.stop()
   }
   
-  override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
-    var data = self.messages[indexPath.row]
+  override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData! {
+    let data = self.messages[indexPath.row]
     return data
   }
   
-  override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return messages.count
   }
   
-  override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+  override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
     
-    var data = messages[indexPath.row]
-    if data.senderId == PFUser.currentUser()!.objectId! {
+    let data = messages[indexPath.row]
+    if data.senderId == PFUser.current()!.objectId! {
       return outgoingBubble
     } else {
       return incomingBubble
     }
   }
   
-  override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+  override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
     
     let m = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text)
-    messages.append(m)
+    messages.append(m!)
     
     if let id = matchID {
       saveMessage(id, Message(message: text, senderID: senderId, date: date))
